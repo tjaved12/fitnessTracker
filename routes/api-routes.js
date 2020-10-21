@@ -1,13 +1,17 @@
 // Requiring our models and passport as we've configured it
 var db = require("../models");
-
+const path = require("path");
 
 // Route for getting some data about our user to be used client side
 module.exports= function(app){
 
-  app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname + "../public/exercise.html"));
+  app.get("/exercise", (req, res) => {
+    res.sendFile(path.join(__dirname + "/../public/exercise.html"));
   });
+  app.get("/stats", (req, res) => {
+    res.sendFile(path.join(__dirname + "/../public/stats.html"));
+  });
+ 
   
 app.get("/all", function (req, res) {
  db. Workout.find({})
@@ -28,61 +32,33 @@ db.Workout.find({}).then(data => {
 });
 });
 
-
-app.post("/api/workouts",(req, res) => {
-    db.Workout.update(
-      {
-        _id: mongojs.ObjectId(req.params.id)
-      },
-      {
-        $set: {
-          type: req.body.type,
-          name: req.body.name,
-          modified: Date.now()
-        }
-      },
-      (error, data) => {
-        if (error) {
-          res.send(error);
-        } else {
-          res.send(data);
-        }
-      }
-    );
+app.get("/api/workouts/range", function(req,res){
+  db.Workout.find({}).then(data => {
+    res.json(data);
+  })
+  .catch(err => {
+    res.json(err);
+  });
   });
   
-  // db.Workout.find({}).then(data => {
-  //   method: "POST";
-  //     headers: { "Content-Type"; "application/json" };
-  //     body: JSON.stringify(data)
-  //   });
 
+app.put("/api/workouts/:id",(req, res) => {
+   
+  var condition = "id = " + req.params.id;
+  console.log("condition", condition)
+  db.Workout.update(condition, function(result) {
+    if (result.changedRows == 0) {
+      // If no rows were changed, then the ID must not exist, so 404
+      return res.status(404).end();
+    } else {
+      res.status(200).end();
+    }
+  });
+});
  
+  
+
 }
-// app.put("/api/workout_modify", function (req, res) {
 
-//   db[req.body.workout.update({
-//     exercise:req.body.exercise
-//   }, {
-//     where: {
-//       id: req.body.id
-//     }
-//   }).then(update => {
-//     res.send("this worked well")
-//   }),
-
-
-// app.post("/api/workout_add", function (req, res) {
-
-//   db[req.body.day].create({
-//     exercise:req.body.exercise
-//   }, {
-//     where: {
-//       id: req.body.id
-//     }
-//   }).then(create => {
-//     res.send("this worked tooooooooo well")
-//   })
-
-// })
-//   ]
+  
+  
