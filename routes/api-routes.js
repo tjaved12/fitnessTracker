@@ -1,7 +1,7 @@
 // Requiring our models and passport as we've configured it
-var db = require("../models");
+var db = require("../Test");
 const path = require("path");
-const { Workout } = require("../models");
+const { Workout } = require("../Test");
 
 // Route for getting some data about our user to be used client side
 module.exports= function(app){
