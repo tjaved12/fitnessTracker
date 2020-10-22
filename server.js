@@ -14,7 +14,7 @@ app.use(express.static("public"));
 
 
 
-mongoose.connect(process.env.MONGODB_URI ||"mongodb://localhost/workout", {
+mongoose.connect(process.env.MONGODB_URI ||"mongodb://localhost/Workout", {
   useNewUrlParser: true,
   useFindAndModify: false
 });
@@ -22,6 +22,9 @@ mongoose.connect(process.env.MONGODB_URI ||"mongodb://localhost/workout", {
 
 //app.use(require("./routes/view-routes.js"));
 require ("./routes/api-routes.js")(app)
-app.listen(3000, () => {
-  console.log("App running on port 3000!");
+// app.listen(3000, () => {
+//   console.log("App running on port 3000!");
+// });
+app.listen(PORT, () => {
+  console.log(`App running on port ${PORT}!`);
 });
